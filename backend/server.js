@@ -26,22 +26,22 @@ const PORT = process.env.PORT || 5000;
 // Create the new product
 
 app.post("/create", async (req, res) => {
-    const newProduct = new Product({
-        title: req.body.title,
-        description: req.body.description,
-        price: req.body.price,
-        discountPercentage: req.body.discountPercentage,
-        rating: req.body.rating,
-        stock: req.body.stock,
-        brand: req.body.brand,
-        category: req.body.category,
-        thumbnail: req.body.thumbnail,
-        images: req.body.images,
-    })
+  const newProduct = new Product({
+    title: req.body.data.title,
+    description: req.body.data.description,
+    price: req.body.data.price,
+    discountPercentage: req.body.data.discountPercentage,
+    rating: req.body.data.rating,
+    stock: req.body.data.stock,
+    brand: req.body.data.brand,
+    category: req.body.data.category,
+    thumbnail: req.body.data.thumbnail,
+    images: req.body.data.images,
+  });
 
-    await Product.create(newProduct);
-    res.send("Product saved to the database!")
-})
+  await Product.create(newProduct);
+  res.send("Product saved to the database!");
+});
 
 //Get the all product list
 
