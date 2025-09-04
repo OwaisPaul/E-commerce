@@ -1,44 +1,48 @@
-import React, { useState } from 'react';
-import { Grid, Paper, TextField, Typography, Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import React, { useEffect, useState }  from 'react';
+import { Grid, Paper, TextField, Typography, Button } from '@mui/material';
 
-const AddProduct = () => {
-    const navigate = useNavigate();
-    const [productData, setProductData] = useState({
-          title: "",
-          brand: "",
-          category: "",
-          description: "",
-          discountPercentage: "",
-          images: "",
-          price: "",
-          rating: "",
-          stock: "",
-          thumbnail: "",
-            })
-        
-            const handleInputChanges = (event) => {
-                const { name, value } = event.target;
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-                setProductData({ ...productData, [name]: value});
-            }
+const UpdateProduct = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [productData, setProductData] = useState({});
 
-           const handleSave = async () => {
-            console.log(productData);
-            try {
-            const response = await axios.post("http://localhost:5000/create", {
-            data: productData,
-            });
-            if (response.data === "Product saved to the database!") {
-            navigate("/");
-            }
-            } catch (e) {
-            console.log(e);
-            }
-            };
+  useEffect(() => {
+    getProduct();
+  }, []);
 
-            return (
+  const getProduct = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/get/" + id);
+      console.log(response.data);
+      setProductData(response.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleInputChanges = (event) => {
+    const { name, value } = event.target;
+
+    setProductData({ ...productData, [name]: value });
+  };
+
+  const handleUpdate = async () => {
+    try {
+      const response = await axios.put("http://localhost:5000/update/" + id, {
+        data: productData,
+      });
+      if (response.data === "Product updated successfully!") {
+        navigate("/");
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+return (
     <React.Fragment>
       <Grid
         container
@@ -75,7 +79,7 @@ const AddProduct = () => {
                         InputLabelProps={{
                           shrink: true,
                         }}
-                        value={productData.title}
+                        value={productData.title || ""}
                         name="title"
                         onChange={handleInputChanges}
                       />
@@ -88,7 +92,7 @@ const AddProduct = () => {
                         InputLabelProps={{
                           shrink: true,
                         }}
-                        value={productData.brand}
+                        value={productData.brand || ""}
                         name="brand"
                         onChange={handleInputChanges}
                       />
@@ -101,7 +105,7 @@ const AddProduct = () => {
                         InputLabelProps={{
                           shrink: true,
                         }}
-                        value={productData.category}
+                        value={productData.category || ""}
                         name="category"
                         onChange={handleInputChanges}
                       />
@@ -114,7 +118,7 @@ const AddProduct = () => {
                         InputLabelProps={{
                           shrink: true,
                         }}
-                        value={productData.description}
+                        value={productData.description || ""}
                         name="description"
                         onChange={handleInputChanges}
                       />
@@ -128,7 +132,7 @@ const AddProduct = () => {
                           shrink: true,
                         }}
                         type="number"
-                        value={productData.discountPercentage}
+                        value={productData.discountPercentage || ""}
                         name="discountPercentage"
                         onChange={handleInputChanges}
                       />
@@ -145,7 +149,7 @@ const AddProduct = () => {
                         InputLabelProps={{
                           shrink: true,
                         }}
-                        value={productData.images}
+                        value={productData.images || ""}
                         name="images"
                         onChange={handleInputChanges}
                       />
@@ -159,7 +163,7 @@ const AddProduct = () => {
                           shrink: true,
                         }}
                         type="number"
-                        value={productData.price}
+                        value={productData.price || ""}
                         name="price"
                         onChange={handleInputChanges}
                       />
@@ -173,7 +177,7 @@ const AddProduct = () => {
                           shrink: true,
                         }}
                         type="number"
-                        value={productData.rating}
+                        value={productData.rating || ""}
                         name="rating"
                         onChange={handleInputChanges}
                       />
@@ -187,7 +191,7 @@ const AddProduct = () => {
                           shrink: true,
                         }}
                         type="number"
-                        value={productData.stock}
+                        value={productData.stock || ""}
                         name="stock"
                         onChange={handleInputChanges}
                       />
@@ -200,7 +204,7 @@ const AddProduct = () => {
                         InputLabelProps={{
                           shrink: true,
                         }}
-                        value={productData.thumbnail}
+                        value={productData.thumbnail || ""}
                         name="thumbnail"
                         onChange={handleInputChanges}
                       />
@@ -211,8 +215,12 @@ const AddProduct = () => {
             </Grid>
 
             <Grid item>
-              <Button variant="contained" color="primary" onClick={handleSave}>
-                Save
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleUpdate}
+              >
+                Update
               </Button>
             </Grid>
             <Grid item></Grid>
@@ -221,8 +229,6 @@ const AddProduct = () => {
       </Grid>
     </React.Fragment>
   );
-        }
+};
 
-        export default AddProduct;
-
-        
+export default UpdateProduct;

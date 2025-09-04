@@ -43,3 +43,5 @@ const NavBar = () => {
         </React.Fragment>
     )
 }
+
+export default NavBar;
