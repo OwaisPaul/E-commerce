@@ -4,14 +4,21 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import mongoose from "mongoose";
 import Product from "./models/product.js";
+import product from "./routes/product.js";
 
  dotenv.config() // looks for a file named .env in root directory
 
+ 
+ import isAuth from "./middleware/auth.js";
+
 const app = express();
 const PORT = process.env.PORT || 5000;
+
  // middleware
  app.use(cors());
  app.use(express.json()); // allows express to parse JSON request body
+ app.use('/product' , product)
+ app.use(isAuth);
 
  // Creating the connection with MongoDB Atlas
  mongoose
