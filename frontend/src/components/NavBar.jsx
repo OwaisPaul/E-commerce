@@ -1,25 +1,41 @@
-import React from 'react';
-import { useNavigate }  from 'react-router-dom';
-import AppBar from '@mui/material/AppBar';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 
 const NavBar = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [token, setToken] = useState();
+  const [isAdmin, setIsAdmin] = useState();
 
-    const goToHome = () => {
-        navigate('/');
-    };
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+    setIsAdmin(localStorage.getItem("isAdmin"));
+  }, [token]);
 
-    const goToAddProduct = () => {
-        navigate("/addProduct");
-    }
+  const goToHome = () => {
+    navigate("/");
+  };
 
-    return (
-        <React.Fragment>
-            <Box sx={{ flexGrow: 1 }}> {/* sx is inline styling system */}
+  const goToAddProduct = () => {
+    navigate("/addProduct");
+  };
+
+  const goToLogin = () => {
+    navigate("/login");
+  };
+
+  const logOut = () => {
+    localStorage.clear();
+    navigate("/");
+  };
+
+  return (
+    <React.Fragment>
+      <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
           <Toolbar>
             <Typography
@@ -34,14 +50,25 @@ const NavBar = () => {
             <Button color="inherit" onClick={goToHome}>
               Home
             </Button>
-            <Button color="inherit" onClick={goToAddProduct}>
-              Add product
-            </Button>
+            {isAdmin && (
+              <Button color="inherit" onClick={goToAddProduct}>
+                Add product
+              </Button>
+            )}
+            {!token ? (
+              <Button color="inherit" onClick={goToLogin}>
+                Login
+              </Button>
+            ) : (
+              <Button color="inherit" onClick={logOut}>
+                LogOut
+              </Button>
+            )}
           </Toolbar>
         </AppBar>
       </Box>
-        </React.Fragment>
-    )
-}
+    </React.Fragment>
+  );
+};
 
 export default NavBar;
