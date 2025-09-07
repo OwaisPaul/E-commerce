@@ -8,15 +8,15 @@ import Button from "@mui/material/Button";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Badge from "@mui/material/Badge";
 import { IconButton } from "@mui/material";
-import { useSelector } from "react-redux"; // enabling the selection of data from the Redux store.
-import logo from "../img/logo_2.png";
+import { useSelector } from "react-redux";
+import logo from "../img/logo_2.png"; 
 import ButtonBase from "@mui/material/ButtonBase";
-import { AuthContext } from '../../context/authContext';
-
-const authContext = React.useContext(AuthContext);
+import { AuthContext } from "../../context/authContext";
 
 const NavBar = () => {
   const navigate = useNavigate();
+  const authContext = React.useContext(AuthContext);
+  const items = useSelector((state) => state.cartStore.addedItems);
   const [token, setToken] = useState();
   const [isAdmin, setIsAdmin] = useState();
 
@@ -37,7 +37,7 @@ const NavBar = () => {
     navigate("/login");
   };
 
- const logOut = () => {
+  const logOut = () => {
     localStorage.clear();
     setIsAdmin();
     setToken();
@@ -45,21 +45,18 @@ const NavBar = () => {
     navigate("/");
   };
 
-const goToOrders = () => {
-    navigate("/orders");
-};
+  const goToCart = () => {
+    navigate("/cart");
+  };
 
-{token && (
-    <Button color="inherit" onClick={goToOrders}>
-       Orders
-    </Button>
- )}
-<IconButton onClick={goToCart} />
+  const goToOrders = () => {
+    navigate("/orders");
+  };
 
   return (
     <React.Fragment>
       <Box sx={{ flexGrow: 1 }}>
-       <AppBar position="static" sx={{ background: "#38B6FF" }}>
+        <AppBar position="static" sx={{ background: "#38B6FF" }}>
           <Toolbar>
             <ButtonBase onClick={goToHome}>
               <Box
@@ -69,13 +66,19 @@ const goToOrders = () => {
               />
             </ButtonBase>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} />
-
-            <IconButton onClick={goToOrders}>
-              <Badge badgeContent={items.length} color="secondary">
-                <ShoppingCartIcon />
-              </Badge>
-            </IconButton>
-            {isAdmin && (
+            {token && isAdmin === "false" && (
+              <Button color="inherit" onClick={goToOrders}>
+                Orders
+              </Button>
+            )}
+            {isAdmin === "false" && (
+              <IconButton onClick={goToCart}>
+                <Badge badgeContent={items.length} color="secondary">
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
+            )}
+            {isAdmin === "true" && (
               <Button color="inherit" onClick={goToAddProduct}>
                 Add product
               </Button>

@@ -1,33 +1,27 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Grid, Button } from "@mui/material";
-// import not_found_pic from "../img/not_found.png";
 import Pagination from "@mui/material/Pagination";
-// import "../App.css";
+// import not_found_pic from "../img/not_found.png";
 
+//other components
 import NavBar from "../components/NavBar";
 import ProductCard from "../components/ProductCard";
 import SearchComponent from "../filterComps/SearchComponent";
 import SortComponent from "../filterComps/SortComponent";
 import CategoryComponent from "../filterComps/CategoryComponent";
-import PriceRangeComponent from "../filterComps/PriceRangeComponent";
-import BrandListComponent from "../filterComps/BrandListComponent";
 
-const pageSize = 10;
+const pageSize = 12;
 
-const HomePage = () => {
+const AdminPage = () => {
   const [productList, setProductList] = useState([]);
   const [originalData, setOriginalData] = useState([]);
-  const [originalBrandList, setOriginalBrandList] = useState([]);
   const [searchValue, setSearchValue] = useState("");
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(0);
-  const [minPriceDinamic, setMinPriceDinamic] = useState(0);
-  const [maxPriceDinamic, setMaxPriceDinamic] = useState(0);
   const [priceRange, setPriceRange] = useState([0, 100]);
   const [category, setCategory] = useState("all");
   const [sortValue, setSortValue] = useState("Select value");
   const [allbrandList, setAllBrandList] = useState([]);
+  const [originalBrandList, setOriginalBrandList] = useState([]);
 
   //Pagination
   const [pagination, setPagination] = useState({
@@ -52,7 +46,7 @@ const HomePage = () => {
     getProduct();
   }, []);
 
-  useEffect(() => {}, [priceRange, allbrandList, minPrice, maxPrice]);
+  useEffect(() => {}, [priceRange, allbrandList]);
 
   const getProduct = async () => {
     try {
@@ -72,11 +66,6 @@ const HomePage = () => {
           return val.price;
         })
       );
-      setMinPrice(min);
-      setMaxPrice(max);
-      setMinPriceDinamic(min);
-      setMaxPriceDinamic(max);
-      setPriceRange([min, max]);
 
       let brand_array = response.data.map(function (item) {
         return item.brand;
@@ -166,48 +155,6 @@ const HomePage = () => {
     }
   };
 
-  //SORT BY PRICE WITH PRICE RANGE
-  const sortByPrice = (priceRange) => {
-    console.log("ALL PRODUCT:", productList);
-    let sortData = [];
-    if (category === "all") {
-      console.log("ALl data");
-      sortData = originalData.filter(
-        (item) => item.price >= priceRange[0] && item.price <= priceRange[1]
-      );
-    } else {
-      console.log("ALl product");
-      sortData = productList.filter(
-        (item) =>
-          item.price >= priceRange[0] &&
-          item.price <= priceRange[1] &&
-          item.category === category
-      );
-    }
-
-    setProductList(sortData);
-  };
-
-  //SORT PRODUCT LIST BY BRAND
-  const sortByBrand = () => {
-    const filteredBrand = allbrandList.filter((item) => item.checked === true);
-    let allFilteredProduct = [];
-
-    for (let item in filteredBrand) {
-      originalData.filter(function (el) {
-        if (el.brand === filteredBrand[item].value) {
-          allFilteredProduct.push(el);
-        }
-      });
-    }
-
-    if (filteredBrand.length === 0) {
-      setProductList(originalData);
-    } else {
-      setProductList(allFilteredProduct);
-    }
-  };
-
   //SORT BY CATEGORIES
   const handleCatChange = (value) => {
     setCategory(value);
@@ -248,37 +195,11 @@ const HomePage = () => {
     }
   };
 
-  //HANDLE PRICE RANGE
-  const handlePriceRange = (event, newValue) => {
-    setPriceRange(newValue);
-    setMinPriceDinamic(newValue[0]);
-    setMaxPriceDinamic(newValue[1]);
-    sortByPrice(newValue);
-  };
-
-  //HANDLE MIN PRICE INPUT
-  const handleMinPrice = (event) => {
-    setMinPriceDinamic(parseInt(event.target.value));
-    setPriceRange([parseInt(event.target.value), maxPriceDinamic]);
-    sortByPrice([parseInt(event.target.value), maxPriceDinamic]);
-  };
-
-  //HANDLE MAX PRICE INPUT
-  const handleMaxPrice = (event) => {
-    setMaxPriceDinamic(parseInt(event.target.value));
-    setPriceRange([minPriceDinamic, parseInt(event.target.value)]);
-    sortByPrice([minPriceDinamic, parseInt(event.target.value)]);
-  };
-
   //CLEAR ALL FILTERS
   const handleClearFilters = () => {
     setSearchValue("");
     setCategory("all");
     setSortValue("Select value");
-    setMinPriceDinamic(minPrice);
-    setMaxPriceDinamic(maxPrice);
-    setPriceRange([minPrice, maxPrice]);
-    sortByPrice(priceRange);
 
     originalBrandList.map((item) => {
       if (item.checked === true) {
@@ -288,14 +209,6 @@ const HomePage = () => {
 
     setAllBrandList(originalBrandList);
     setProductList(originalData);
-  };
-
-  //HANDLE BRAND
-  const handleChanges = (index) => {
-    const curr = allbrandList;
-    curr[index].checked = !curr[index].checked;
-    sortByBrand(curr);
-    setAllBrandList([...curr]);
   };
 
   return (
@@ -325,25 +238,7 @@ const HomePage = () => {
                   categoryValue={category}
                 />
               </Grid>
-              <Grid item>
-                <PriceRangeComponent
-                  minPriceDinamic={minPriceDinamic}
-                  maxPriceDinamic={maxPriceDinamic}
-                  minPrice={minPrice}
-                  maxPrice={maxPrice}
-                  priceRange={priceRange}
-                  handleMaxPrice={handleMaxPrice}
-                  handleMinPrice={handleMinPrice}
-                  handlePriceRange={handlePriceRange}
-                />
-              </Grid>
             </Grid>
-            <div>
-              <BrandListComponent
-                allbrandList={allbrandList}
-                onChange={handleChanges}
-              />
-            </div>
           </div>
         </Grid>
         <Grid item xs={10}>
@@ -391,4 +286,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default AdminPage;

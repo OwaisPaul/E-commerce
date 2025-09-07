@@ -1,3 +1,4 @@
+import "./App.css";
 import React,{ useState } from 'react'
 // importing Route and Routes from the React router library
 import { Route, Routes } from "react-router-dom";
@@ -7,6 +8,7 @@ import AddProductPage from "./pages/AddProductPage";
 import UpdateProductPage from "./pages/UpdateProductPage";
 import CartPage from './pages/CartPage';
 import OrdersPage from './pages/OrdersPage';
+import AdminPage from './pages/AdminPage.jsx';
 
 import {AuthContext } from '../context/authContext.js';
 import RequiredAuth from '../utils/authRoutes';
