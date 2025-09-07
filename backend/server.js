@@ -5,6 +5,7 @@ import cors from 'cors'
 import mongoose from "mongoose";
 import Product from "./models/product.js";
 import product from "./routes/product.js";
+import order from './routes/order.js';
 
  dotenv.config() // looks for a file named .env in root directory
 
@@ -19,6 +20,7 @@ const PORT = process.env.PORT || 5000;
  app.use(express.json()); // allows express to parse JSON request body
  app.use('/product' , product)
  app.use(isAuth);
+ app.use('/order', order);
 
  // Creating the connection with MongoDB Atlas
  mongoose

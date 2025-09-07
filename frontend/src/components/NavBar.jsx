@@ -5,6 +5,12 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import Badge from "@mui/material/Badge";
+import { IconButton } from "@mui/material";
+import { useSelector } from "react-redux"; // enabling the selection of data from the Redux store.
+import logo from "../img/logo_2.png";
+import ButtonBase from "@mui/material/ButtonBase";
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -32,24 +38,29 @@ const NavBar = () => {
     localStorage.clear();
     navigate("/");
   };
+  const goToOrders = () => {
+    navigate("/cart");
+  };
 
   return (
     <React.Fragment>
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
+       <AppBar position="static" sx={{ background: "#38B6FF" }}>
           <Toolbar>
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{
-                flexGrow: 1,
-              }}
-            >
-              E-COM
-            </Typography>
-            <Button color="inherit" onClick={goToHome}>
-              Home
-            </Button>
+            <ButtonBase onClick={goToHome}>
+              <Box
+                component="img"
+                sx={{ width: "8rem", height: "5rem" }}
+                src={logo}
+              />
+            </ButtonBase>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} />
+
+            <IconButton onClick={goToOrders}>
+              <Badge badgeContent={items.length} color="secondary">
+                <ShoppingCartIcon />
+              </Badge>
+            </IconButton>
             {isAdmin && (
               <Button color="inherit" onClick={goToAddProduct}>
                 Add product

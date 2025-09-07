@@ -12,9 +12,13 @@ import { Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
+import { addToCart, removeFromCart } from "../../store/cart/cartActions";
+import { useDispatch } from "react-redux";
+
 import axios from "axios";
 
 const ProductCard = (props) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [product, setProduct] = useState(props.product);
   const [token, setToken] = useState();
@@ -41,6 +45,15 @@ const ProductCard = (props) => {
       console.log(e);
     }
   };
+
+  const handleAddToCart = (product) => {
+    
+    const product_item = {
+      product: product,
+      amount: amountInputRef.current.value,
+    };
+    dispatch(addToCart(product_item));
+  }
 
   return (
     <React.Fragment>
@@ -112,7 +125,7 @@ const ProductCard = (props) => {
                   variant="contained"
                   color="primary"
                   endIcon={<AddShoppingCartIcon />}
-                  // onClick={addToCartHandler}
+                  onClick={() => handleAddToCart(product)}
                 >
                   + Add
                 </Button>

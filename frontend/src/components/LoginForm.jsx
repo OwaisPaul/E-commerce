@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Paper, TextField, Grid, Button, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/authContext";
+import { AuthContext } from "../../context/authContext";
 import axios from "axios";
 
 const LoginForm = (props) => {

@@ -5,9 +5,11 @@ import { Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage"
 import AddProductPage from "./pages/AddProductPage";
 import UpdateProductPage from "./pages/UpdateProductPage";
+import CartPage from './pages/CartPage';
 
 import {AuthContext } from '../context/authContext.js';
-import RequiredAuth from '../utils/authRoutes.js';
+import RequiredAuth from '../utils/authRoutes';
+import AuthPage from './pages/AuthPage.jsx'
 
 function App() {
   const [userLoggedData, setUserLoggedData] = useState({
@@ -42,6 +44,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<AuthPage />} />
+        <Route path="/cart" element={<CartPage />} />
         {/* protected views*/}
         <Route
           path="/addProduct"
