@@ -11,6 +11,9 @@ import { IconButton } from "@mui/material";
 import { useSelector } from "react-redux"; // enabling the selection of data from the Redux store.
 import logo from "../img/logo_2.png";
 import ButtonBase from "@mui/material/ButtonBase";
+import { AuthContext } from '../../context/authContext';
+
+const authContext = React.useContext(AuthContext);
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -34,13 +37,24 @@ const NavBar = () => {
     navigate("/login");
   };
 
-  const logOut = () => {
+ const logOut = () => {
     localStorage.clear();
+    setIsAdmin();
+    setToken();
+    authContext.logout();
     navigate("/");
   };
-  const goToOrders = () => {
-    navigate("/cart");
-  };
+
+const goToOrders = () => {
+    navigate("/orders");
+};
+
+{token && (
+    <Button color="inherit" onClick={goToOrders}>
+       Orders
+    </Button>
+ )}
+<IconButton onClick={goToCart} />
 
   return (
     <React.Fragment>

@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage"
 import AddProductPage from "./pages/AddProductPage";
 import UpdateProductPage from "./pages/UpdateProductPage";
 import CartPage from './pages/CartPage';
+import OrdersPage from './pages/OrdersPage';
 
 import {AuthContext } from '../context/authContext.js';
 import RequiredAuth from '../utils/authRoutes';
@@ -45,6 +46,9 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<AuthPage />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/orders" element={<RequiredAuth><OrdersPage /></RequiredAuth>
+    }
+ />
         {/* protected views*/}
         <Route
           path="/addProduct"

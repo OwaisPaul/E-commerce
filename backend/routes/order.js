@@ -24,5 +24,10 @@ router.post("/create", async (req, res) => {
   res.send("Order saved to the database!");
 });
 
+  router.get("/:userId", async (req, res) => {
+    const userID = req.params.userId;
+    const orderList = await Order.find({ userID: userID });
+    res.send(orderList);
+});
 
 export default router;
